@@ -1,6 +1,6 @@
 import { IsInt } from 'class-validator';
 
-export class PaginateTodoDto {
+export class PaginateDto {
 	@IsInt()
 	nb: number;
 

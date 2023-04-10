@@ -1,13 +1,9 @@
-import {
-	Column,
-	CreateDateColumn,
-	Entity,
-	PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { TodoStatus } from '@todo/models/todo.model';
+import { BasicEntity } from '@shared/entities/basic.entity';
 
 @Entity()
-export class TodoEntity {
+export class TodoEntity extends BasicEntity {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
@@ -19,20 +15,4 @@ export class TodoEntity {
 
 	@Column({ type: 'enum', enum: TodoStatus, default: TodoStatus.waiting })
 	status: TodoStatus;
-
-	@CreateDateColumn({
-		type: 'timestamp',
-		update: false,
-	})
-	createdAt: string;
-
-	@CreateDateColumn({
-		type: 'timestamp',
-	})
-	updatedAt: string;
-
-	@CreateDateColumn({
-		type: 'timestamp',
-	})
-	deletedAt: string;
 }

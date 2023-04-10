@@ -4,6 +4,7 @@ import {
 	Delete,
 	Get,
 	Param,
+	ParseEnumPipe,
 	ParseUUIDPipe,
 	Patch,
 	Post,
@@ -13,24 +14,25 @@ import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoEntity } from './entities/todo.entity';
-import { PaginateTodoDto } from './dto/paginate-todo.dto';
+import { PaginateDto } from '@shared/dto/paginate.dto';
 import { CriteriaTodoDto } from './dto/criteria-todo.dto';
+import { TodoStatus } from '@todo/models/todo.model';
 
 @Controller('todo')
 export class TodoController {
 	constructor(private readonly todoService: TodoService) {}
 
-	@Get('get')
-	getTodos(@Query('paginate') page?: PaginateTodoDto): Promise<TodoEntity[]> {
+	@Get()
+	getTodos(@Query('paginate') page?: PaginateDto): Promise<TodoEntity[]> {
 		return this.todoService.getTodos(page);
 	}
 
-	@Get('get/:id')
+	@Get(':id')
 	getTodo(@Param('id', ParseUUIDPipe) id: string) {
 		return this.todoService.getTodo(id);
 	}
 
-	@Get('get')
+	@Get('criteria')
 	getTodoByCriteria(
 		@Query() criteria: CriteriaTodoDto,
 	): Promise<TodoEntity[]> {

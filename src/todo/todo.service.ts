@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TodoEntity } from '@todo/entities/todo.entity';
 import { TodoStatus } from '@todo/models/todo.model';
 import { CriteriaTodoDto } from '@todo/dto/criteria-todo.dto';
-import { PaginateTodoDto } from '@todo/dto/paginate-todo.dto';
+import { PaginateDto } from '@shared/dto/paginate.dto';
 
 @Injectable()
 export class TodoService {
@@ -15,7 +15,7 @@ export class TodoService {
 		private repository: Repository<TodoEntity>,
 	) {}
 
-	async getTodos(page?: PaginateTodoDto): Promise<TodoEntity[]> {
+	async getTodos(page?: PaginateDto): Promise<TodoEntity[]> {
 		if (page)
 			return this.repository.find({
 				skip: page.nbPerPage * (page.nb - 1),
