@@ -1,29 +1,29 @@
-import {Controller, Delete, Get, Patch, Post, Put} from '@nestjs/common';
+import { Controller, Delete, Get, Patch, Post, Put } from '@nestjs/common';
 
 @Controller('premier')
 export class PremierController {
-  @Get()
-  get(): string {
-    return 'get';
-  }
+	@Get()
+	get(): string {
+		return 'get';
+	}
 
-  @Post()
-  post(): string {
-    return 'post';
-  }
+	@Post()
+	post(): string {
+		return 'post';
+	}
 
-  @Delete()
-  delete(): string {
-    return 'delete';
-  }
+	@Delete()
+	delete(): string {
+		return 'delete';
+	}
 
-  @Put()
-  put(): string {
-    return 'put';
-  }
+	@Put()
+	put(): string {
+		return 'put';
+	}
 
-  @Patch()
-  patch(): string {
-    return 'patch';
-  }
+	@Patch()
+	patch(): string {
+		return 'patch';
+	}
 }
