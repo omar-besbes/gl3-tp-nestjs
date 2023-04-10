@@ -1,4 +1,4 @@
-import { ITodo } from '../model/todo.model';
+import { ITodo } from '@todo/models/todo.model';
 import { IsString } from 'class-validator';
 
 export class CreateTodoDto implements Pick<ITodo, 'name' | 'description'> {

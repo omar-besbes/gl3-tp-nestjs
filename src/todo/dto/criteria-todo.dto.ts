@@ -1,4 +1,4 @@
-import { TodoStatus } from '../model/todo.model';
+import { TodoStatus } from '@todo/models/todo.model';
 import { IsEnum, IsString } from 'class-validator';
 
 export class CriteriaTodoDto {

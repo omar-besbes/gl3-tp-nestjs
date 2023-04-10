@@ -1,4 +1,4 @@
-import { ITodo, TodoStatus } from '../model/todo.model';
+import { ITodo, TodoStatus } from '@todo/models/todo.model';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class UpdateTodoDto implements Omit<ITodo, 'createdAt' | 'id'> {

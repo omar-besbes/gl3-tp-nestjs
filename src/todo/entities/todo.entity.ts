@@ -4,7 +4,7 @@ import {
 	Entity,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TodoStatus } from '../model/todo.model';
+import { TodoStatus } from '@todo/models/todo.model';
 
 @Entity()
 export class TodoEntity {
@@ -22,6 +22,7 @@ export class TodoEntity {
 
 	@CreateDateColumn({
 		type: 'timestamp',
+		update: false,
 	})
 	createdAt: string;
 
