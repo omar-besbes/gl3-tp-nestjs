@@ -39,6 +39,13 @@ export class TodoController {
 		return this.todoService.getTodoByCriteria(criteria);
 	}
 
+	@Get('status/:status')
+	getCountByStatus(
+		@Param('status', new ParseEnumPipe(TodoStatus)) status: TodoStatus,
+	) {
+		return this.todoService.getCountByStatus(status);
+	}
+
 	@Post('add')
 	addTodo(@Body() todo: CreateTodoDto): Promise<TodoEntity> {
 		return this.todoService.addTodo(todo);

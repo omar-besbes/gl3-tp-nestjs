@@ -47,6 +47,10 @@ export class TodoService {
 		});
 	}
 
+	async getCountByStatus(status: TodoStatus): Promise<number> {
+		return this.repository.count({ where: { status } });
+	}
+
 	async addTodo(todo: CreateTodoDto): Promise<TodoEntity> {
 		return this.repository.create(todo);
 	}
