@@ -14,7 +14,7 @@ import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoEntity } from './entities/todo.entity';
-import { PaginateDto } from '@shared/dto/paginate.dto';
+import { PaginateDto } from '@common/dto/paginate.dto';
 import { CriteriaTodoDto } from './dto/criteria-todo.dto';
 import { TodoStatus } from '@todo/models/todo.model';
 

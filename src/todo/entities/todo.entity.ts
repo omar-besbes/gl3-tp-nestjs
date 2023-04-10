@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { TodoStatus } from '@todo/models/todo.model';
-import { BasicEntity } from '@shared/entities/basic.entity';
+import { BasicEntity } from '@common/entities/basic.entity';
 
 @Entity()
 export class TodoEntity extends BasicEntity {

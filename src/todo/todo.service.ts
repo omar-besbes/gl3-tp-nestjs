@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TodoEntity } from '@todo/entities/todo.entity';
 import { TodoStatus } from '@todo/models/todo.model';
 import { CriteriaTodoDto } from '@todo/dto/criteria-todo.dto';
-import { PaginateDto } from '@shared/dto/paginate.dto';
+import { PaginateDto } from '@common/dto/paginate.dto';
 
 @Injectable()
 export class TodoService {
