@@ -1,10 +1,12 @@
 import { TodoStatus } from '@todo/models/todo.model';
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class CriteriaTodoDto {
 	@IsString()
-	string?: string;
+	@IsOptional()
+	search?: string;
 
 	@IsEnum(TodoStatus)
+	@IsOptional()
 	status?: TodoStatus;
 }

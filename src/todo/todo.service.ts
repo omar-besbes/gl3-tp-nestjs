@@ -15,13 +15,13 @@ export class TodoService {
 		private repository: Repository<TodoEntity>,
 	) {}
 
-	async getTodos(page?: PaginateDto): Promise<TodoEntity[]> {
-		if (page)
+	async getTodos(page: PaginateDto): Promise<TodoEntity[]> {
+		if (page.nb !== undefined) {
 			return this.repository.find({
-				skip: page.nbPerPage * (page.nb - 1),
+				skip: page.nbPerPage * page.nb,
 				take: page.nbPerPage,
 			});
-		else return this.repository.find();
+		} else return this.repository.find();
 	}
 
 	async getTodo(id: string): Promise<TodoEntity> {
@@ -37,11 +37,11 @@ export class TodoService {
 			where: [
 				{
 					status: criteria.status,
-					name: Like(`%${criteria.string}%`),
+					name: Like(`%${criteria.search ?? ''}%`),
 				},
 				{
 					status: criteria.status,
-					description: Like(`%${criteria.string}%`),
+					description: Like(`%${criteria.search ?? ''}%`),
 				},
 			],
 		});
@@ -52,7 +52,9 @@ export class TodoService {
 	}
 
 	async addTodo(todo: CreateTodoDto): Promise<TodoEntity> {
-		return this.repository.create(todo);
+		const response = this.repository.create(todo);
+		await this.repository.save(response);
+		return response;
 	}
 
 	async modifyTodo(id: string, newTodo: UpdateTodoDto): Promise<TodoEntity> {

@@ -14,29 +14,30 @@ import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoEntity } from './entities/todo.entity';
-import { PaginateDto } from '@common/dto/paginate.dto';
 import { CriteriaTodoDto } from './dto/criteria-todo.dto';
 import { TodoStatus } from '@todo/models/todo.model';
+import { PaginateDto } from '@common/dto/paginate.dto';
 
 @Controller('todo')
 export class TodoController {
 	constructor(private readonly todoService: TodoService) {}
 
 	@Get()
-	getTodos(@Query('paginate') page?: PaginateDto): Promise<TodoEntity[]> {
+	getTodos(@Query() page: PaginateDto): Promise<TodoEntity[]> {
 		return this.todoService.getTodos(page);
-	}
-
-	@Get(':id')
-	getTodo(@Param('id', ParseUUIDPipe) id: string) {
-		return this.todoService.getTodo(id);
 	}
 
 	@Get('criteria')
 	getTodoByCriteria(
 		@Query() criteria: CriteriaTodoDto,
 	): Promise<TodoEntity[]> {
+		console.log(criteria);
 		return this.todoService.getTodoByCriteria(criteria);
+	}
+
+	@Get(':id')
+	getTodo(@Param('id', ParseUUIDPipe) id: string) {
+		return this.todoService.getTodo(id);
 	}
 
 	@Get('status/:status')
