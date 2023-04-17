@@ -11,12 +11,16 @@ import {
 	Query,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
-import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
+import { CreateTodoDto } from '@todo/dtos/create-todo.dto';
+import { UpdateTodoDto } from '@todo/dtos/update-todo.dto';
 import { TodoEntity } from './entities/todo.entity';
-import { CriteriaTodoDto } from './dto/criteria-todo.dto';
-import { TodoStatus } from '@todo/models/todo.model';
-import { PaginateDto } from '@common/dto/paginate.dto';
+import { CriteriaTodoDto } from '@todo/dtos/criteria-todo.dto';
+import { TodoStatus } from '@todo/interfaces/todo.interface';
+import { PaginateDto } from '@common/dtos/paginate.dto';
+import { UserEntity } from '@user/entities/user.entity';
+import { AuthUser } from '@todo/decorators/auth-user.decorator';
+import { CreatorOnly } from '@todo/decorators/creator-only.decorator';
+import { Todo } from '@todo/decorators/todo.decorator';
 
 @Controller('todo')
 export class TodoController {
@@ -31,7 +35,6 @@ export class TodoController {
 	getTodoByCriteria(
 		@Query() criteria: CriteriaTodoDto,
 	): Promise<TodoEntity[]> {
-		console.log(criteria);
 		return this.todoService.getTodoByCriteria(criteria);
 	}
 
@@ -48,25 +51,31 @@ export class TodoController {
 	}
 
 	@Post('add')
-	addTodo(@Body() todo: CreateTodoDto): Promise<TodoEntity> {
-		return this.todoService.addTodo(todo);
+	addTodo(
+		@Body() todo: CreateTodoDto,
+		@AuthUser() user: UserEntity,
+	): Promise<TodoEntity> {
+		return this.todoService.addTodo(todo, user);
 	}
 
 	@Patch('modify/:id')
-	modifyTodo(
-		@Param('id', ParseUUIDPipe) id: string,
+	@CreatorOnly()
+	async modifyTodo(
+		@Todo() _todo: TodoEntity,
 		@Body() todo: UpdateTodoDto,
 	): Promise<TodoEntity> {
-		return this.todoService.modifyTodo(id, todo);
+		return this.todoService.modifyTodo(_todo, todo);
 	}
 
 	@Delete('delete/:id')
-	removeTodo(@Param('id', ParseUUIDPipe) id: string) {
-		return this.todoService.deleteTodo(id);
+	@CreatorOnly()
+	async removeTodo(@Todo() todo: TodoEntity) {
+		return this.todoService.deleteTodo(todo.id);
 	}
 
 	@Patch('restore/:id')
-	restoreTodo(@Param('id', ParseUUIDPipe) id: string) {
-		return this.todoService.restoreTodo(id);
+	@CreatorOnly()
+	async restoreTodo(@Todo() todo: TodoEntity) {
+		return this.todoService.restoreTodo(todo.id);
 	}
 }

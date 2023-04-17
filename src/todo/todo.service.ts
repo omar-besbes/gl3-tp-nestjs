@@ -1,18 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTodoDto } from '@todo/dto/create-todo.dto';
-import { UpdateTodoDto } from '@todo/dto/update-todo.dto';
+import { CreateTodoDto } from '@todo/dtos/create-todo.dto';
+import { UpdateTodoDto } from '@todo/dtos/update-todo.dto';
 import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoEntity } from '@todo/entities/todo.entity';
-import { TodoStatus } from '@todo/models/todo.model';
-import { CriteriaTodoDto } from '@todo/dto/criteria-todo.dto';
-import { PaginateDto } from '@common/dto/paginate.dto';
+import { TodoStatus } from '@todo/interfaces/todo.interface';
+import { CriteriaTodoDto } from '@todo/dtos/criteria-todo.dto';
+import { PaginateDto } from '@common/dtos/paginate.dto';
+import { UserEntity } from '@user/entities/user.entity';
 
 @Injectable()
 export class TodoService {
 	constructor(
 		@InjectRepository(TodoEntity)
-		private repository: Repository<TodoEntity>,
+		private readonly repository: Repository<TodoEntity>,
 	) {}
 
 	async getTodos(page: PaginateDto): Promise<TodoEntity[]> {
@@ -51,19 +52,17 @@ export class TodoService {
 		return this.repository.count({ where: { status } });
 	}
 
-	async addTodo(todo: CreateTodoDto): Promise<TodoEntity> {
-		const response = this.repository.create(todo);
+	async addTodo(todo: CreateTodoDto, user: UserEntity): Promise<TodoEntity> {
+		const response = this.repository.create({ ...todo, user });
 		await this.repository.save(response);
 		return response;
 	}
 
-	async modifyTodo(id: string, newTodo: UpdateTodoDto): Promise<TodoEntity> {
-		let todo = await this.repository.findOne({ where: { id } });
-
-		if (todo === null)
-			throw new NotFoundException('No todo was found with this id');
+	async modifyTodo(
+		todo: TodoEntity,
+		newTodo: UpdateTodoDto,
+	): Promise<TodoEntity> {
 		todo = { ...todo, ...newTodo };
-
 		return await this.repository.save(todo);
 	}
 

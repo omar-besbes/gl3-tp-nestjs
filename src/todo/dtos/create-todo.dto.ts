@@ -1,4 +1,4 @@
-import { ITodo } from '@todo/models/todo.model';
+import { ITodo } from '@todo/interfaces/todo.interface';
 import { IsString, MaxLength, MinLength } from 'class-validator';
 import {
 	DESCRIPTION_MIN_LENGTH,

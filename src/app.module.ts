@@ -7,6 +7,8 @@ import { CommonModule } from '@common/common.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DatabaseConfig, databaseConfig } from '@config/database.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from '@user/user.module';
+import { jwtConfig } from '@config/jwt.config';
 
 @Module({
 	imports: [
@@ -16,15 +18,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 			useFactory: async (
 				configService: ConfigService,
 			): Promise<TypeOrmModuleOptions> => ({
-				type: 'mysql',
-				host: configService.getOrThrow<DatabaseConfig>('database').host,
-				port: configService.getOrThrow<DatabaseConfig>('database').port,
-				username:
-					configService.getOrThrow<DatabaseConfig>('database').username,
-				password:
-					configService.getOrThrow<DatabaseConfig>('database').password,
-				database:
-					configService.getOrThrow<DatabaseConfig>('database').database,
+				...configService.getOrThrow<DatabaseConfig>('database'),
 				synchronize: true,
 				autoLoadEntities: true,
 			}),
@@ -36,13 +30,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 				'.env.development.local',
 				'.env.development',
 			],
-			load: [databaseConfig],
+			load: [databaseConfig, jwtConfig],
 			expandVariables: true,
 			cache: true,
 		}),
 		PremierModule,
 		TodoModule,
 		CommonModule,
+		UserModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

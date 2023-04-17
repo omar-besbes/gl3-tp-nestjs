@@ -1,7 +1,7 @@
-import { ITodo, TodoStatus } from '@todo/models/todo.model';
+import { ITodo, TodoStatus } from '@todo/interfaces/todo.interface';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
-export class UpdateTodoDto implements Omit<ITodo, 'createdAt' | 'id'> {
+export class UpdateTodoDto implements Omit<ITodo, 'createdAt' | 'id' | 'user'> {
 	@IsString()
 	@IsOptional()
 	description: string;
