@@ -1,11 +1,17 @@
 import {
+	BaseEntity,
 	CreateDateColumn,
 	DeleteDateColumn,
+	ObjectLiteral,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import { ICommon } from '@common/interfaces/common.inerface';
 
-export abstract class BasicEntity {
+export abstract class CommonEntity
+	extends BaseEntity
+	implements ObjectLiteral, ICommon
+{
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 

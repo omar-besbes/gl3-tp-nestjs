@@ -28,19 +28,19 @@ export class TodoController {
 
 	@Get()
 	getTodos(@Query() page: PaginateDto): Promise<TodoEntity[]> {
-		return this.todoService.getTodos(page);
+		return this.todoService.findAll(page);
 	}
 
 	@Get('criteria')
 	getTodoByCriteria(
 		@Query() criteria: CriteriaTodoDto,
 	): Promise<TodoEntity[]> {
-		return this.todoService.getTodoByCriteria(criteria);
+		return this.todoService.findByCriteria(criteria);
 	}
 
 	@Get(':id')
 	getTodo(@Param('id', ParseUUIDPipe) id: string) {
-		return this.todoService.getTodo(id);
+		return this.todoService.findOne(id);
 	}
 
 	@Get('status/:status')
@@ -55,7 +55,7 @@ export class TodoController {
 		@Body() todo: CreateTodoDto,
 		@AuthUser() user: UserEntity,
 	): Promise<TodoEntity> {
-		return this.todoService.addTodo(todo, user);
+		return this.todoService.create(todo, user);
 	}
 
 	@Patch('modify/:id')
@@ -64,18 +64,18 @@ export class TodoController {
 		@Todo() _todo: TodoEntity,
 		@Body() todo: UpdateTodoDto,
 	): Promise<TodoEntity> {
-		return this.todoService.modifyTodo(_todo, todo);
+		return this.todoService.update(_todo, todo);
 	}
 
 	@Delete('delete/:id')
 	@CreatorOnly()
 	async removeTodo(@Todo() todo: TodoEntity) {
-		return this.todoService.deleteTodo(todo.id);
+		return this.todoService.remove(todo.id);
 	}
 
 	@Patch('restore/:id')
 	@CreatorOnly()
 	async restoreTodo(@Todo() todo: TodoEntity) {
-		return this.todoService.restoreTodo(todo.id);
+		return this.todoService.restore(todo.id);
 	}
 }

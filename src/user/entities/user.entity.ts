@@ -1,10 +1,11 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import { BasicEntity } from '@common/entities/basic.entity';
+import { CommonEntity } from '@common/entities/common.entity';
 import { IUser } from '@user/interfaces/user.interface';
 import { TodoEntity } from '@todo/entities/todo.entity';
+import { CvEntity } from '@cv/entities/cv.entity';
 
 @Entity()
-export class UserEntity extends BasicEntity implements IUser {
+export class UserEntity extends CommonEntity implements IUser {
 	@Column()
 	name: string;
 
@@ -22,4 +23,7 @@ export class UserEntity extends BasicEntity implements IUser {
 
 	@OneToMany(() => TodoEntity, (todo) => todo.user)
 	todos: TodoEntity[];
+
+	@OneToMany(() => CvEntity, (cv) => cv.user)
+	cvs: CvEntity[];
 }

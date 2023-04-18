@@ -1,10 +1,10 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { ITodo, TodoStatus } from '@todo/interfaces/todo.interface';
-import { BasicEntity } from '@common/entities/basic.entity';
+import { CommonEntity } from '@common/entities/common.entity';
 import { UserEntity } from '@user/entities/user.entity';
 
 @Entity()
-export class TodoEntity extends BasicEntity implements ITodo {
+export class TodoEntity extends CommonEntity implements ITodo {
 	@Column()
 	name: string;
 

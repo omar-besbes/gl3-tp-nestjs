@@ -9,6 +9,8 @@ import { DatabaseConfig, databaseConfig } from '@config/database.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from '@user/user.module';
 import { jwtConfig } from '@config/jwt.config';
+import { CvModule } from '@cv/cv.module';
+import { SkillModule } from '@skill/skill.module';
 
 @Module({
 	imports: [
@@ -38,6 +40,8 @@ import { jwtConfig } from '@config/jwt.config';
 		TodoModule,
 		CommonModule,
 		UserModule,
+		CvModule,
+		SkillModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

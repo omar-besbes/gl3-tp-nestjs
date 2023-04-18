@@ -26,7 +26,7 @@ export class TodoGuard implements CanActivate {
 		});
 
 		// check if user is indeed the creator of the provided todo
-		const todo = await this.todoService.getTodo(id);
+		const todo = await this.todoService.findOne(id);
 		const user: UserEntity = request['user'];
 		if (todo.user.id !== user.id)
 			throw new ForbiddenException('This todo is not yours');

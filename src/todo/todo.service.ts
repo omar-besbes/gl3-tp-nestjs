@@ -1,6 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateTodoDto } from '@todo/dtos/create-todo.dto';
-import { UpdateTodoDto } from '@todo/dtos/update-todo.dto';
 import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoEntity } from '@todo/entities/todo.entity';
@@ -8,15 +7,28 @@ import { TodoStatus } from '@todo/interfaces/todo.interface';
 import { CriteriaTodoDto } from '@todo/dtos/criteria-todo.dto';
 import { PaginateDto } from '@common/dtos/paginate.dto';
 import { UserEntity } from '@user/entities/user.entity';
+import { CommonService } from '@common/common.service';
+import { UpdateTodoDto } from '@todo/dtos/update-todo.dto';
 
 @Injectable()
-export class TodoService {
+export class TodoService extends CommonService<
+	TodoEntity,
+	CreateTodoDto,
+	UpdateTodoDto
+> {
 	constructor(
 		@InjectRepository(TodoEntity)
-		private readonly repository: Repository<TodoEntity>,
-	) {}
+		protected readonly repository: Repository<TodoEntity>,
+	) {
+		super(repository, TodoEntity.name);
+	}
 
-	async getTodos(page: PaginateDto): Promise<TodoEntity[]> {
+	async create(todo: CreateTodoDto, user: UserEntity): Promise<TodoEntity> {
+		const response = this.repository.create({ ...todo, user });
+		return await this.repository.save(response);
+	}
+
+	async findAll(page: PaginateDto): Promise<TodoEntity[]> {
 		if (page.nb !== undefined) {
 			return this.repository.find({
 				skip: page.nbPerPage * page.nb,
@@ -25,15 +37,7 @@ export class TodoService {
 		} else return this.repository.find();
 	}
 
-	async getTodo(id: string): Promise<TodoEntity> {
-		const todo = await this.repository.findOneBy({ id });
-
-		if (todo === null)
-			throw new NotFoundException('No todo was found with this id');
-		return todo;
-	}
-
-	async getTodoByCriteria(criteria: CriteriaTodoDto): Promise<TodoEntity[]> {
+	async findByCriteria(criteria: CriteriaTodoDto): Promise<TodoEntity[]> {
 		return await this.repository.find({
 			where: [
 				{
@@ -52,37 +56,7 @@ export class TodoService {
 		return this.repository.count({ where: { status } });
 	}
 
-	async addTodo(todo: CreateTodoDto, user: UserEntity): Promise<TodoEntity> {
-		const response = this.repository.create({ ...todo, user });
-		await this.repository.save(response);
-		return response;
-	}
-
-	async modifyTodo(
-		todo: TodoEntity,
-		newTodo: UpdateTodoDto,
-	): Promise<TodoEntity> {
-		todo = { ...todo, ...newTodo };
-		return await this.repository.save(todo);
-	}
-
-	async deleteTodo(id: string): Promise<{ count: number }> {
-		const { affected } = await this.repository.softDelete(id);
-
-		if (affected < 1)
-			throw new NotFoundException('No todo was found with this id');
-		return { count: affected };
-	}
-
-	async restoreTodo(id: string): Promise<{ count: number }> {
-		const { affected } = await this.repository.restore(id);
-
-		if (affected < 1)
-			throw new NotFoundException('No todo was found with this id');
-		return { count: affected };
-	}
-
-	async getTodoCount(status: TodoStatus): Promise<number> {
+	async getCount(status: TodoStatus): Promise<number> {
 		return this.repository.count({ where: { status } });
 	}
 }
