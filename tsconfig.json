@@ -11,8 +11,20 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
+      "@tp": [
+        "apps/tp/src"
+      ],
+      "@tp/*": [
+        "apps/tp/src/*"
+      ],
+      "@seed-db": [
+        "apps/seed-db/src"
+      ],
+      "@seed-db/*": [
+        "apps/seed-db/src/*"
+      ],
       "@*": [
-        "./src/*",
+        "./src/*"
       ]
     },
     "incremental": true,
